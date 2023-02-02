@@ -139,3 +139,22 @@ then use it like you would normally
 ```bash
 php bin/console make:entity
 ```
+
+## More services
+
+If you want to add more services, you can add them in the docker-compose.yml file. For example for meilisearch :
+```yaml
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    restart: always
+    ports:
+      - 7700:7700
+    volumes:
+      - meilisearch:/data.ms
+  [...]
+  volumes:
+    [...]
+    meilisearch:
+```
+
