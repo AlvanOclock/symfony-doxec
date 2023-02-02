@@ -4,6 +4,8 @@ Symfony Doxec is a tool to create and develop a Symfony project with docker.
 
 It comes with a doxec script that will help you to create a new project, start it, stop it etc.
 
+Why *Doxec* ? Because it's a mix of *Docker* and *Exec*. The main goal being to run commands in a docker container.
+
 ## Requirements
 
 - Docker
@@ -17,7 +19,7 @@ That's all :tada:
 
 Clone this repository and copy files in an empty directory of your choice.
 
-We are going to use a script to help us create everyting. But it's not mandatory. You can do everything manually and get rid of the script. Manual instructions are available below on the **Manual** section.
+We are going to use the `doxec` script to help us create everyting. But it's not mandatory. You can do everything manually and get rid of the script. Manual instructions are available below on the **Manual** section.
 
 --- 
 ### Alias for the doxec script
@@ -28,6 +30,11 @@ alias doxec="./doxec"
 ```
 
 ### Starting containers
+
+If you have not defined an alias, you need to run the script with `./doxec`.
+
+If doxec is not executable, you need to make it executable with `(sudo chmod +x doxec`.
+
 From the folder where you copied files, run `doxec up` to start docker containers. All services are defined in the docker-compose.yml file.
 
 Services are:
