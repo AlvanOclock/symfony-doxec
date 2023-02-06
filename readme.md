@@ -142,19 +142,27 @@ php bin/console make:entity
 
 ## More services
 
-If you want to add more services, you can add them in the docker-compose.yml file. For example for meilisearch :
-```yaml
-  meilisearch:
-    image: getmeili/meilisearch:latest
-    container_name: meilisearch
-    restart: always
-    ports:
-      - 7700:7700
-    volumes:
-      - meilisearch:/data.ms
-  [...]
-  volumes:
-    [...]
-    meilisearch:
+There is two more services in this docker-compose file: meilisearch and a caddy server with a mercure hub.
+
+Change JWT Secret in docker compose : 
+```bash
+JWT_KEY: '!TheSecretToChange!'
+MERCURE_PUBLISHER_JWT_KEY: '!TheSecretToChange!'
+MERCURE_SUBSCRIBER_JWT_KEY: '!TheSecretToChange!'
 ```
 
+In the .env.local file, add the following lines:
+```bash
+MERCURE_URL=http://mercure/.well-known/mercure
+MERCURE_PUBLIC_URL=http://mercure/.well-known/mercure
+MERCURE_JWT_SECRET=!TheSecretToChange!
+MERCURE_CORS_ALLOWED_ORIGINS=*
+```
+
+Create a token here : https://jwt.io/ with the same secret as you defined earlier. You can change the secret at the bottom right of the form.
+This token will be used to publish or subscribe.
+
+Access the interface of the hub here : http://localhost:8082/.well-known/mercure/ui
+You can test if your token works by setting it in the settings section. Then try to subscribe to a topic and publish to a topic.
+
+Topics must be in the form of `http://example.com/{topic}`

@@ -39,5 +39,34 @@ services:
       - 8025:8025
       - 1025:1025
     restart: always
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    container_name: meilisearch
+    ports:
+      - 7700:7700
+    restart: always
+    volumes:
+      - meilisearch:/data.ms
+  caddy:
+    image: dunglas/mercure
+    restart: unless-stopped
+    container_name: mercure
+    environment:
+      # Uncomment the following line to disable HTTPS
+      SERVER_NAME: ':80'
+      JWT_KEY: '!TheSecretToChange!'
+      MERCURE_PUBLISHER_JWT_KEY: '!TheSecretToChange!'
+      MERCURE_SUBSCRIBER_JWT_KEY: '!TheSecretToChange!'
+    # Uncomment the following line to enable the development mode
+    command: /usr/bin/caddy run --config /etc/caddy/Caddyfile.dev
+    ports:
+      - "8082:80"
+      - "4433:443"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
 volumes:
+  caddy_data:
+  caddy_config:
   mysql:
+  meilisearch:
