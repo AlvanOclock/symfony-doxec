@@ -118,6 +118,7 @@ if [ "$1" = "sf" ] && [ "$2" = "install" ]; then
     docker exec -it web rm -rf tmp
     
     docker exec -it web composer require --dev doctrine/doctrine-fixtures-bundle
+    docker exec -it web composer require symfony/mercure
 
     touch .env.local
     printf "DATABASE_URL=mysql://user:password@db/database?serverVersion=5.7&charset=utf8mb4\n" >> .env.local
