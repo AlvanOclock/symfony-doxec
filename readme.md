@@ -166,3 +166,40 @@ Access the interface of the hub here : http://localhost:8082/.well-known/mercure
 You can test if your token works by setting it in the settings section. Then try to subscribe to a topic and publish to a topic.
 
 Topics must be in the form of `http://example.com/{topic}`
+
+(doc and good implementation is not finished but here's a POC)
+
+In a Symfony controller, define theses 
+
+```php
+define('HUB_URL', 'http://mercure/.well-known/mercure');
+define('JWT', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.d-OMAinT8QctdPgZX_A74Cmw0NnEKLk-eGSN0vDPSJc');
+
+use Symfony\Component\Mercure\Jwt\StaticTokenProvider;
+use Symfony\Component\Mercure\Publisher;
+use Symfony\Component\Mercure\Update;
+```
+
+Then in a method, you can publish to a topic like this : 
+
+```php
+$topic = 'http://example.com/topic_name';
+$data = ['foo' => 'bar'];
+
+$tokenProvider = new StaticTokenProvider(JWT);
+$publisher = new Publisher(HUB_URL, $tokenProvider);
+
+$update = new Update($topic, json_encode($data));
+$publisher($update);
+```
+
+On your frontend subscribe to a topic like this : 
+
+```js
+var source = new EventSource("http://localhost:8082/.well-known/mercure?topic=http://example.com/topic_name");
+source.onmessage = function(event) {
+  console.log(event.data);
+  
+  document.getElementById("newPublishs").innerHTML += event.data + "<br>";
+};
+
