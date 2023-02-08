@@ -27,11 +27,35 @@ CLEAR='\033[0m'
 # If no command provided
 if [ -z "$1" ]; then
   printf "\n${RED}No command provided${CLEAR} \n"
+  printf "Run ${GREEN}\"doxec help\"${CLEAR} to see available commands \n\n"
   printf "Usage: ${GREEN}\"doxec <command>\"${CLEAR} \n"
   printf "Example: ${GREEN}\"doxec composer install\"${CLEAR} \n\n"
   printf "Shortcut available for symfony commands: \n"
   printf "Example: ${GREEN}\"doxec symfony make:entity\"${CLEAR} \n\n"
   exit 1
+fi
+
+# help
+if [ "$1" = "help" ]; then
+  printf "\n${GREEN}== Available commands ==${CLEAR} \n\n"
+  printf "${GREEN}up${CLEAR} - Start containers \n"
+  printf "Container that will be started: web, db, phpmyadmin, mailhog, meilisearch, caddy for mercure \n\n"
+  printf "${GREEN}stop${CLEAR} - Stop containers \n"
+  printf "Containers will be stopped but not removed \n\n"
+  printf "${GREEN}down${CLEAR} - Stop containers and remove them \n"
+  printf "Containers will be stopped and removed \n\n"
+  printf "${GREEN}clean${CLEAR} - Stop containers, clear volume, remove image web \n"
+  printf "Containers will be stopped and removed, volume will be cleared and image web will be removed \n\n"
+  printf "${GREEN}bash${CLEAR} - Enter bash in web container \n"
+  printf "You are now in the web container. Execute any command you want \n\n"
+  printf "${GREEN}sf install${CLEAR} - Install symfony project \n"
+  printf "It will install a new symfony project or install dependencies, migration and fixtures of this existing one\n\n"
+  printf "${GREEN}sf <command>${CLEAR} - Execute symfony <command> \n"
+  printf "Example: ${YELLOW}\"doxec sf make:entity\"${CLEAR} \n\n"
+  printf "${GREEN}<command>${CLEAR} - Execute any <command> in web container \n\n"
+  printf "Example: ${YELLOW}\"doxec composer install\"${CLEAR} \n\n"
+  printf "${GREEN}help${CLEAR} - Show this help \n\n"
+  exit 0
 fi
 
 # Stop containers, clear volume, remove image web
