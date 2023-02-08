@@ -157,6 +157,7 @@ MERCURE_URL=http://mercure/.well-known/mercure
 MERCURE_PUBLIC_URL=http://mercure/.well-known/mercure
 MERCURE_JWT_SECRET=!TheSecretToChange!
 MERCURE_CORS_ALLOWED_ORIGINS=*
+MERCURE_JWT={MERCURE_JWT HERE, SEE BELOW HOW TO GENERATE IT}
 ```
 
 Create a token here : https://jwt.io/ with the same secret as you defined earlier. You can change the secret at the bottom right of the form.
@@ -179,12 +180,17 @@ Topics must be in the form of `http://example.com/{topic}`
 
 (doc and good implementation is not finished but here's a POC)
 
-In a Symfony controller, define theses 
+In your `config/services.yaml`, add this : 
+
+```yaml
+parameters:
+  app.mercure_jwt: '%env(MERCURE_JWT)%'
+  app.mercure_hub_url: '%env(MERCURE_URL)%'
+```
+
+In a Symfony controller, use these classes:
 
 ```php
-define('HUB_URL', 'http://mercure/.well-known/mercure');
-define('JWT', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.d-OMAinT8QctdPgZX_A74Cmw0NnEKLk-eGSN0vDPSJc');
-
 use Symfony\Component\Mercure\Jwt\StaticTokenProvider;
 use Symfony\Component\Mercure\Publisher;
 use Symfony\Component\Mercure\Update;
@@ -193,11 +199,14 @@ use Symfony\Component\Mercure\Update;
 Then in a method, you can publish to a topic like this : 
 
 ```php
+$jwt = $this->getParameter('app.mercure_jwt');
+$hubUrl = $this->getParameter('app.mercure_hub_url');
+
 $topic = 'http://example.com/topic_name';
 $data = ['foo' => 'bar'];
 
-$tokenProvider = new StaticTokenProvider(JWT);
-$publisher = new Publisher(HUB_URL, $tokenProvider);
+$tokenProvider = new StaticTokenProvider($jwt);
+$publisher = new Publisher($hubUrl, $tokenProvider);
 
 $update = new Update($topic, json_encode($data));
 $publisher($update);
