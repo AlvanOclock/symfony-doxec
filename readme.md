@@ -162,6 +162,16 @@ MERCURE_CORS_ALLOWED_ORIGINS=*
 Create a token here : https://jwt.io/ with the same secret as you defined earlier. You can change the secret at the bottom right of the form.
 This token will be used to publish or subscribe.
 
+The payload could be this (but should be more secured in production): 
+```json
+{
+  "mercure": {
+    "publish": ["*"],
+    "subscribe": ["*"]
+  }
+}
+```
+
 Access the interface of the hub here : http://localhost:8082/.well-known/mercure/ui
 You can test if your token works by setting it in the settings section. Then try to subscribe to a topic and publish to a topic.
 
