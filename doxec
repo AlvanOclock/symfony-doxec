@@ -81,8 +81,9 @@ fi
 
 # If doxec up
 if [ "$1" = "up" ]; then
+  shift
   printf "\n${GREEN}== Starting containers ==${CLEAR} \n\n"
-  CURRENT_UID=$(id -u):$(id -g) docker compose up -d
+  CURRENT_UID=$(id -u):$(id -g) docker compose up -d "$@"
   exit 0
 fi
 
